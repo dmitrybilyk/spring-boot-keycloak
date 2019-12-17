@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: headerFragment">
+</head>
+<body>
+	<div id="container">
+		<h1>
+			<!--Hello, <span th:text="${username}">&#45;&#45;name&#45;&#45;</span>.-->
+		</h1>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>Service Rendered</th>
+				</tr>
+			</thead>
+			<tbody>
+			<tr th:each="user : ${users}">
+				<td th:text="${user.getUsername()}">Text ...</td>
+			</tr>
+			</tbody>
+		</table>
+		<div id="pagefoot" th:include="layout :: footerFragment">Footer
+		</div>
+	</div>
+	<!-- container -->
+</body>
+</html>
