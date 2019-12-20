@@ -4,6 +4,8 @@ import com.zoomint.keycloak.clientTokenProvider.ClientTokenProperties;
 import com.zoomint.keycloak.clientTokenProvider.ClientTokenProvider;
 import com.zoomint.keycloak.provider.api.client.KeycloakApiProviderClient;
 import com.zoomint.keycloak.provider.api.client.exceptions.KeycloakApiProviderClientException;
+import com.zoomint.keycloak.provider.api.dto.Group;
+import com.zoomint.keycloak.provider.api.dto.GroupLookup;
 import com.zoomint.keycloak.provider.api.dto.User;
 import com.zoomint.keycloak.provider.api.dto.UserLookup;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static spark.Spark.get;
 
@@ -45,12 +49,21 @@ public class WebController {
     }
 
     @GetMapping(path = "/test")
-    public String test(Principal principal, Model model) throws KeycloakApiProviderClientException {
+    public String test(Model model) throws KeycloakApiProviderClientException {
         ClientTokenProperties clientTokenProperties = ClientTokenProperties.builder().serverUrl(authServerUrl).realm(realm).clientId(keycloakClient).clientSecret(clientSecret).build();
         ClientTokenProvider clientTokenProvider = new ClientTokenProvider(clientTokenProperties);
-        get("/", (req, res) -> clientTokenProvider.getAccessTokenString());
+//        get("/", (req, res) -> clientTokenProvider.getAccessTokenString());
         KeycloakApiProviderClient keycloakApiProviderClient = new KeycloakApiProviderClient("http", serverIp, 80, realm);
-        List<User> userList = keycloakApiProviderClient.getUsers(clientTokenProvider.getAccessTokenString(), UserLookup.builder().build());
+
+//        List<Group> groups = keycloakApiProviderClient.getGroups(clientTokenProvider.getAccessTokenString(), GroupLookup.builder().build());
+//        List<Group> subGroups = keycloakApiProviderClient.getSubGroups(clientTokenProvider.getAccessTokenString(), "80ef4a8b-eb37-4ebf-a1c0-9ce6a108842e");
+//        List<Group> subGroups = keycloakApiProviderClient.getSubGroups(clientTokenProvider.getAccessTokenString(), "1f3c6472-bc2b-44fc-ae9a-841c13d09a67");
+//        Map<String, List<Group>> groupsMembership = keycloakApiProviderClient.getGroupsMembership(clientTokenProvider.getAccessTokenString(), Collections.singletonList("1"));
+
+//        SupervisorsJpaEntityApiProviderClient
+
+        List<User> userList = keycloakApiProviderClient.getUsers(clientTokenProvider.getAccessTokenString(), UserLookup.builder().username("ablackman").build());
+
         model.addAttribute("users", userList);
         return "test";
     }
